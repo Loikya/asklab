@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h2 class="question_tread_header text-center"> Профиль пользователя {{ profile.user.username }}</h2>
+
+    <div class="container-fluid mt-5">
+    <div class="row ">
+                <div class=" col-xl-3">
+                    <img class="rounded-circle mx-auto profile_img" src= {{ profile.avatar_image.url }} >
+                </div>
+
+                <div class=" col-xl-9 pl-5">
+                    <h4 class="profile_info"><strong>Имя пользователя: </strong> {{ profile.user.username }}</h4>
+                    <h4 class="profile_info"><strong>E-mail: </strong> {{ profile.user.email }}</h4>
+                    <h4 class="profile_info"><strong>Возраст: </strong> {{ profile.age }}</h4>
+                    <h4 class="profile_info"><strong>Зарегестрирован: </strong> {{ profile.user.date_joined }}</h4>
+
+                    <h3 class="profile_info_header text-center"><strong>Статистика: </strong></h3>
+
+                    <h4 class="profile_info"><strong>Вопросов задано: </strong> {{ questions_count }}</h4>
+                    <h4 class="profile_info"><strong>Ответов дано: </strong> {{ answers_count }}</h4>
+                    <h4 class="profile_info"><strong>Суммарный рейтинг вопросов: </strong> {{ question_rate }}</h4>
+                    <h4 class="profile_info"><strong>Суммарный рейтинг ответов: </strong> {{ answer_rate }}</h4>
+
+
+                </div>
+    </div>
+        <a href="{% url 'user-questions' pk=profile.user.id %}" class="btn btn-outline-secondary btn-block mt-3 pt-3 pb-3"><h5 class="my-auto">Перейти к вопросам пользователя</h5> </a>
+    </div>
+
+{% endblock %}

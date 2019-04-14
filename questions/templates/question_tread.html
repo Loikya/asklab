@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load question_filters %}
+
+{% block content %}
+{% include 'confirm_delete_modal.html' %}
+    <h2 class="question_tread_header">{{ question.title }}</h2>
+    {% if user == question.autor %}
+        <div class="toolbar d-flex flex-row-reverse">
+
+            <button class="confirm-delete btn btn-outline-primary trash p-1 btn-sm pt-1 ml-2" title="Delete" data-toggle="modal" data-target="#confirmDeleteModal"><i class="fa fa-fw fa-trash"></i></button>
+            <a href="{% url 'question-update' question.pk%}" ><button class='confirm-delete btn btn-outline-primary trash p-1 btn-sm pt-1'>
+                        <i class="fa fa-fw fa-pencil"></i></button></a>
+        </div>
+    {% endif %}
+    <div class="d-flex pb-0 ">
+        <div class="">
+            <ul class="nav flex-column">
+                <li class="nav-item mx-auto">
+                    <button class='btn btn-lg btn-block like pb-0 mb-0 mx-auto' style='background-color:transparent;'
+                            id="like{{ question.pk }}">
+                        {% if user|has_like:question.pk %}
+                            <i class="fa fa-fw fa-thumbs-up" style="color:green"></i></button>
+                        {% else %}
+                            <i class="fa fa-fw fa-thumbs-o-up"></i></button>
+                        {% endif %}
+                </li>
+
+                <li class="nav-item">
+                    <div class="mx-auto rate text-center" id="rate{{ question.pk }}">{{ question.rate }}</div>
+                </li>
+
+                <li class="nav-item">
+                    <button class='btn btn-lg dislike btn-block pt-0 mx-auto' style='background-color:transparent;'
+                            id="dislike{{ question.pk }}">
+                        {% if user|has_dislike:question.pk %}
+                            <i class="fa fa-fw fa-thumbs-down" style="color:red"></i></button>
+                        {% else %}
+                            <i class="fa fa-fw fa-thumbs-o-down"></i></button>
+                        {% endif %}
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="container d-flex flex-column pb-0">
+            <div class="mr-4 mt-2 mb-3"><p class="mb-0">{{question.text|safe}}</p></div>
+            <div class="question_foot d-flex flex-row py-auto ">
+                <p class="align-bottom mb-0 mr-auto">Создан: {{ question.date }}</p>
+                <p class="mb-1 ml-auto"> Автор: <a href="{% url 'user_profile' pk=question.autor.profile.id %}" class="align-bottom mb-0">{{ question.autor }}</a></p>
+            </div>
+        </div>
+
+    </div>
+    <div class="answ_count">
+        <h3>Ответов: {{ question.answers.count }}</h3>
+    </div>
+
+    {% for answer in  question.answers.all %}
+        <div class="container-fluid pl-0 mb-3">
+            {% include "answer.html" %}
+        </div>
+    {% endfor %}
+    {% include "add_answer.html" %}
+
+{% endblock %}

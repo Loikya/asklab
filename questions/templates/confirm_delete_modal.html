@@ -1,0 +1,16 @@
+<!--Delete button will redirect to the href of the element with 'id = caller-id' property in this modal-->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" caller-id="" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-body confirm-delete text-center">
+          <p>Вы действительно хотите удалить вопрос?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Нет, я передумал</button>
+            <form action="{% url 'question-delete' pk=question.pk %}" method="POST">{% csrf_token %}
+                <button type="submit" class="btn btn-danger">Да</button>
+            </form>
+      </div>
+    </div>
+  </div>
+</div>

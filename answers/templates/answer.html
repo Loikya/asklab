@@ -1,0 +1,66 @@
+{% load answer_filters %}
+<div class="d-flex">
+
+    <div class="">
+            <ul class="nav flex-column">
+                <li class="nav-item mx-auto">
+                    <button class='btn btn-lg btn-block answ_button like pb-0 mb-0 mx-auto' style='background-color:transparent;'
+                            id="like{{ answer.pk }}">
+                        {% if user|has_like_answ:answer.pk %}
+                            <i class="fa fa-fw fa-thumbs-up" style="color:green"></i></button>
+                        {% else %}
+                            <i class="fa fa-fw fa-thumbs-o-up"></i></button>
+                        {% endif %}
+                </li>
+
+                <li class="nav-item">
+                    <div class="mx-auto rate text-center" id="rate{{ answer.pk }}">{{ answer.rate }}</div>
+                </li>
+
+                <li class="nav-item">
+                    <button class='btn btn-lg dislike answ_button btn-block pt-0 mx-auto' style='background-color:transparent;'
+                            id="dislike{{ answer.pk }}">
+                        {% if user|has_dislike_answ:answer.pk %}
+                            <i class="fa fa-fw fa-thumbs-down" style="color:red"></i></button>
+                        {% else %}
+                            <i class="fa fa-fw fa-thumbs-o-down"></i></button>
+                        {% endif %}
+                </li>
+            </ul>
+        </div>
+
+    <div class="media container-fluid border p-3">
+        <img src="{{ answer.autor.profile.avatar_image.url }}" class="mr-3 mt-3 rounded-circle" style="width:60px;">
+        <div class="media-body">
+            <div class="d-flex flex-row">
+                <a href="{% url 'user_profile' pk=answer.autor.profile.id %}" class="mr-2 text-muted"><h4>{{ answer.autor.username }}</h4></a> <h4><small><i>Ответил: {{ answer.date }}</i></small></h4>
+                {% if user == answer.autor %}
+                    <div class="modal fade" id="answerconfrimDeleteModal{{ answer.pk }}" tabindex="-1" caller-id="" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body confirm-delete text-center">
+                                    <p>Вы действительно хотите удалить ответ? ID: {{ answer.pk }}</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Нет, я передумал</button>
+                                    <form action="{% url 'answer-delete' pk=answer.pk %}" method="POST">{% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Да</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="toolbar ml-auto" >
+
+                        <button class="confirm-delete btn btn-outline-primary trash p-1 btn-sm pt-1 ml-2" title="Delete" data-toggle="modal" data-target="#answerconfrimDeleteModal{{ answer.pk }}"><i class="fa fa-fw fa-trash"></i></button>
+                        <a href={% url 'answer-update' pk=answer.pk %} ><button class='confirm-delete btn btn-outline-primary trash p-1 btn-sm pt-1'>
+                            <i class="fa fa-fw fa-pencil"></i></button></a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <p>{{ answer.text|safe }}</p>
+
+        </div>
+    </div>
+</div>

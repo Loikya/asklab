@@ -1,0 +1,19 @@
+  {% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+   <h1 class="main_header">Результаты поиска</h1>
+
+    {% if questions %}
+
+      {% for question in questions %}
+          <div class="container-fluid mb-3">
+            {% include 'question.html' %}
+          </div>
+      {% endfor %}
+
+    {% else %}
+      <p>Ничего не найдено...</p>
+    {% endif %}
+
+{% endblock %}

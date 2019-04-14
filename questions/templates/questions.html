@@ -1,0 +1,44 @@
+  {% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+   <h1 class="main_header">Список вопросов</h1>
+
+    <div class="mr-4 ml-4">
+        <ul class="nav nav-tabs d-flex flex-row-reverse">
+            <li class="nav-item">
+                {% if current_sort_field == 'date'%}
+                    <a class="nav-link active" href="?sort_field=date">Сначала старые</a>
+                {% else %}
+                    <a class="nav-link" href="?sort_field=date">Сначала старые</a>
+                {% endif %}
+            </li>
+            <li class="nav-item">
+                {% if current_sort_field == '-rate'%}
+                    <a class="nav-link active" href="?sort_field=-rate">Сначала популярные</a>
+                {% else %}
+                    <a class="nav-link" href="?sort_field=-rate">Сначала популярные</a>
+                {% endif %}
+            </li>
+            <li class="nav-item">
+                {% if current_sort_field == '-date' or  current_sort_field == ''%}
+                    <a class="nav-link active" href="?sort_field=-date">Сначала новые</a>
+                {% else %}
+                    <a class="nav-link" href="?sort_field=-date">Сначала новые</a>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+    {% if questions %}
+
+      {% for question in questions %}
+          <div class="container-fluid mb-3">
+            {% include 'question.html' %}
+          </div>
+      {% endfor %}
+
+    {% else %}
+      <p>Еще никто ничего не спросил.</p>
+    {% endif %}
+
+{% endblock %}

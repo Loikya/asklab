@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Мой прекрасный сайт!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/style.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'ckeditor/ckeditor/plugins/codesnippet/lib/highlight/styles/monokai_sublime.css' %}">
+    <script src="{% static 'ckeditor/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js' %}"></script>
+
+
+    <script type="text/javascript" src="{% static 'scripts.js' %}"></script>
+
+
+</head>
+<script>hljs.initHighlightingOnLoad();</script>
+<body>
+    <div class="jumbotron jumbotron-fluid py-4" id="jumb">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-2">
+                    <img class="img-fluid mx-auto d-block" src="{% static 'images/flask.svg' %}" width="130" height="130">
+                </div>
+                <div class="col-10 mt-4 pb-0">
+                    <h1 class="display-4">Лабораторные вопросы</h1>
+                    <p class="lead">Задай свой вопрос и тебе (может быть) ответят.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% load crispy_forms_tags %}
+    <nav class="navbar navbar-expand-sm bg-info navbar-dark sticky-top">
+      <a class="navbar-brand" href="{% url 'question_list' %}">AskLab</a>
+            <form method="get" action="{% url 'search' %}" class="mx-2 d-inline w-100">
+                {% csrf_token %}
+                {% crispy search_form %}
+
+        </form>
+
+        <ul class="navbar-nav ml-3" id="navbar_right">
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'login' %}">Войти</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'registration' %}">Зарегестрироваться</a>
+            </li>
+        {% endif %}
+      </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+                <div class=" col-xl-8 col-md-12">
+                    <div class="container mx-auto">
+                        <script>window.CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/';</script>
+                        {% block content %}{% endblock %}
+                    </div>
+                </div>
+                <div class="col-xl-4">
+                    <div class="container-fluid">
+                        {% if user.is_authenticated %}
+                        <div class="card mx-auto" id="user_info">
+                          <img class="card-img-top rounded-circle mx-auto d-block mt-3" src="{{ user.profile.avatar_image.url }}" alt="User avatar">
+                          <div class="card-body">
+                            <h4 class="card-title">Добро пожаловать:</h4>
+                              <h3 class="card-title mb-4">{{ user.username }}</h3>
+                              <a href="{% url 'user_profile' pk=user.profile.id %}" class="btn btn-outline-secondary btn-block">Перейти в профиль</a>
+                              <a href="{% url 'user-questions' pk=user.id %}"  class="btn btn-outline-secondary btn-block">Перейти к моим вопросам</a>
+                              <a href="{% url 'question_add' %}" class="btn btn-outline-secondary btn-block">Добавить вопрос</a>
+                          </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+    </div>
+</body>
+</html>
